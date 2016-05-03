@@ -20,7 +20,7 @@ public class ReservationService {
 			mysql = "INSERT INTO reservation  (id_oeuvrevente, id_adherent, date_reservation, statut) values (" +
 					"'" + reservation.getOeuvrevente().getIdOeuvrevente() +
 					"','" + reservation.getAdherent().getIdAdherent() +
-					"','" + new SimpleDateFormat("yyyy-MM-dd").format(reservation.getDate()) +
+					"','" + new SimpleDateFormat("yyyy-MM-dd").format(reservation.getDateReservation()) +
 					"','" + reservation.getStatut() +
 					"')";
 
@@ -36,7 +36,7 @@ public class ReservationService {
 		DialogueBd unDialogueBd = DialogueBd.getInstance();
 		try {
 			mysql = "UPDATE reservation SET " +
-					" date_reservation = '" + new SimpleDateFormat("yyyy-MM-dd").format(reservation.getDate()) + "', " +
+					" date_reservation = '" + new SimpleDateFormat("yyyy-MM-dd").format(reservation.getDateReservation()) + "', " +
 					" id_oeuvrevente = '" + reservation.getOeuvrevente().getIdOeuvrevente() +  "', " +
 					" id_adherent = '" + reservation.getAdherent().getIdAdherent() +  "' " +
 					" WHERE id_oeuvrevente = " + ancinneOeuvre +
@@ -76,7 +76,7 @@ public class ReservationService {
 				// il faut redecouper la liste pour retrouver les lignes
 				resaCible.setOeuvrevente(oeuvreService.getOeuvre(Integer.parseInt(rs.get(index + 0).toString())));
 				resaCible.setAdherent(adherentService.getAdherent(Integer.parseInt(rs.get(index + 1).toString())));
-				resaCible.setDate(date);
+				resaCible.setDateReservation(date);
 
 				index = index + 4;
 				listeResa.add(resaCible);

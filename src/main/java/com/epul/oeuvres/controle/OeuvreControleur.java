@@ -223,7 +223,11 @@ public class OeuvreControleur extends MultiActionController {
 			date = formatter.parse(request.getParameter("maDate"));
 			oeuvre.setEtatOeuvrevente("R");
 			oService.mettreAJourOeuvreVente(oeuvre);
-			Reservation reservation = new Reservation(date,adherent,oeuvre);
+			Reservation reservation = new Reservation();
+			reservation.setAdherent(adherent);
+			reservation.setDateReservation(date);
+			reservation.setOeuvrevente(oeuvre);
+			
 			reservation.setStatut("confirmee");
 			rService.insererReservation(reservation);
 		} catch (MonException e) {

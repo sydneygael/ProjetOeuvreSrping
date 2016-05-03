@@ -1,27 +1,30 @@
 package com.epul.oeuvres.metier;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
 
 /**
  * The persistent class for the oeuvrepret database table.
  * 
  */
-
+@Entity
+@NamedQuery(name="Oeuvrepret.findAll", query="SELECT o FROM Oeuvrepret o")
 public class Oeuvrepret implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id_oeuvrepret")
 	private int idOeuvrepret;
-	private String titreOeuvrepret;
-	private Proprietaire proprietaire;
 
-	
-	public Oeuvrepret(int idOeuvrepret, String titreOeuvrepret, Proprietaire proprietaire) {
-		super();
-		this.idOeuvrepret = idOeuvrepret;
-		this.titreOeuvrepret = titreOeuvrepret;
-		this.proprietaire = proprietaire;
-	}
+	@Column(name="titre_oeuvrepret")
+	private String titreOeuvrepret;
+
+	//bi-directional many-to-one association to Proprietaire
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id_proprietaire")
+	private Proprietaire proprietaire;
 
 	public Oeuvrepret() {
 	}

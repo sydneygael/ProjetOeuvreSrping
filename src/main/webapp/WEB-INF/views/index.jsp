@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="refresh" content="0;URL=javascript:fermer();">
 <title>Expo : Médiathèque De POLYTECH</title>
-<link href="/resources/lib/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" />
-<script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
+<link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css" />
+<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
 <script src="/resources/js/index.js"></script>
 
 <!-- Optional theme -->
@@ -40,8 +40,8 @@
 		<%@ include file="menu.jsp"%>
 	</div>
 
-	<!-- jQuery -->
-	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

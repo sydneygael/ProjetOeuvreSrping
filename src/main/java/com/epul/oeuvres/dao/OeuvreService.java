@@ -12,10 +12,13 @@ import com.epul.oeuvres.persistance.DialogueBd;
  * @author Sydney
  *
  */
-public class OeuvreService {
-
+public class OeuvreService extends EntityManagerService {
 
 	  private static final String SYSTEME_ERROR = "erreur systeme";
+	  
+	  public OeuvreService () {
+		  super();
+	  }
 
 	///////////////////////////////////
 	  //traitements pour les oeuvre pret

@@ -9,42 +9,55 @@ import java.util.Date;
  * The persistent class for the reservation database table.
  * 
  */
+@Entity
+@NamedQuery(name="Reservation.findAll", query="SELECT r FROM Reservation r")
 public class Reservation implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private Date date;
-	private Adherent adherent;
+
+	@EmbeddedId
+	private ReservationPK id;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="date_reservation")
+	private Date dateReservation;
+
+	private String statut;
+
+	//bi-directional many-to-one association to Oeuvrevente
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id_oeuvrevente")
 	private Oeuvrevente oeuvrevente;
-	private String statut; 
+
+	//bi-directional many-to-one association to Adherent
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id_adherent")
+	private Adherent adherent;
 
 	public Reservation() {
 	}
 
-
-
-	public Reservation(Date date, Adherent adherent, Oeuvrevente oeuvrevente) {
-		super();
-		this.date = date;
-		this.adherent = adherent;
-		this.oeuvrevente = oeuvrevente;
+	public ReservationPK getId() {
+		return this.id;
 	}
 
-
-
-	public Date getDate() {
-		return this.date;
+	public void setId(ReservationPK id) {
+		this.id = id;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public Date getDateReservation() {
+		return this.dateReservation;
 	}
 
-	public Adherent getAdherent() {
-		return this.adherent;
+	public void setDateReservation(Date dateReservation) {
+		this.dateReservation = dateReservation;
 	}
 
-	public void setAdherent(Adherent adherent) {
-		this.adherent = adherent;
+	public String getStatut() {
+		return this.statut;
+	}
+
+	public void setStatut(String statut) {
+		this.statut = statut;
 	}
 
 	public Oeuvrevente getOeuvrevente() {
@@ -54,13 +67,13 @@ public class Reservation implements Serializable {
 	public void setOeuvrevente(Oeuvrevente oeuvrevente) {
 		this.oeuvrevente = oeuvrevente;
 	}
-	
-	public String getStatut() {
-		return statut;
+
+	public Adherent getAdherent() {
+		return this.adherent;
 	}
 
-	public void setStatut(String statut) {
-		this.statut = statut;
+	public void setAdherent(Adherent adherent) {
+		this.adherent = adherent;
 	}
 
 }
