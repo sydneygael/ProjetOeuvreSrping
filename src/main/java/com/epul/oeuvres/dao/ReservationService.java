@@ -24,7 +24,7 @@ public class ReservationService extends EntityManagerService {
 		em.close();
 	}
 
-	public void mettreAJourReservation(Reservation reservation, int ancinneOeuvre, int ancienAd) throws MonException {
+	public void mettreAJourReservation(Reservation reservation) throws MonException {
 		this.connection();
 		this.mettreAJour(reservation);
 	}
