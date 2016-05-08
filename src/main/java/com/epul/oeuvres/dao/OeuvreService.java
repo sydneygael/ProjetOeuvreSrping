@@ -30,17 +30,8 @@ public class OeuvreService extends EntityManagerService {
 	 * @throws MonException
 	 */
 	public void insererOeuvrePret(Oeuvrepret oeuvrePret)throws MonException {
-		String mysql = "INSERT INTO oeuvrepret  (titre_oeuvrepret, id_proprietaire) values (" +
-				"'" + oeuvrePret.getTitreOeuvrepret() +
-				"','" + oeuvrePret.getProprietaire().getIdProprietaire() + 
-				"')";
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			unDialogueBd.insertionBD(mysql);
-		} catch (MonException e) {
-			throw e;
-		}
+		connection();
+		this.inserer(oeuvrePret);
 	}
 
 	/**
@@ -49,95 +40,37 @@ public class OeuvreService extends EntityManagerService {
 	 * @throws MonException
 	 */
 	public void mettreAJourOeuvrePret(Oeuvrepret oeuvrePret) throws MonException {
-		String mysql = "UPDATE oeuvrepret SET " +
-				"titre_oeuvrepret = '"+oeuvrePret.getTitreOeuvrepret()+"', " +
-				"id_proprietaire = '" + oeuvrePret.getProprietaire().getIdProprietaire()+"' " +
-				"WHERE id_oeuvrepret = "+oeuvrePret.getIdOeuvrepret();
-		
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			unDialogueBd.insertionBD(mysql);
-		} catch (MonException e) {
-			throw e;
-		}
+		connection();
+		this.mettreAJour(oeuvrePret);
 	}
 	
 
 	/**
-	 * 
 	 * @param numero
 	 * @return
 	 * @throws MonException
 	 */
 	public Oeuvrepret consulterOeuvrePret(int numero) throws MonException {
-		String mysql = "SELECT * FROM oeuvrepret WHERE id_oeuvrepret = " + numero;
-		List<Oeuvrepret> oeuvresList = consulterListeOeuvrePret(mysql);
-		if (oeuvresList.isEmpty())
-			return null;
-		else {
-			return oeuvresList.get(0);
-		}
+		connection();
+		return em.find(Oeuvrepret.class, numero);
 	}
 
+	/**
+	 * @return
+	 * @throws MonException
+	 */
+	@SuppressWarnings("unchecked")
 	public List<Oeuvrepret> consulterListeOeuvresPret() throws MonException {
 		String mysql = "SELECT * FROM oeuvrepret";
-		return consulterListeOeuvrePret(mysql);
-	}
-
-	public List<Oeuvrepret> consulterListeOeuvresPret(int page, int nombreParPage) throws MonException {
-		String mysql = "SELECT * FROM oeuvrepret "+
-				"ORDER BY id_oeuvrepret "+
-				"LIMIT "+(page*nombreParPage)+","+nombreParPage;
-		return consulterListeOeuvrePret(mysql);
-	}
-
-	private List<Oeuvrepret> consulterListeOeuvrePret(String mysql) throws MonException {
-		List<Object> rs;
-		List<Object> rp;
-		List<Oeuvrepret> mesOeuvres = new ArrayList<Oeuvrepret>();
-		int index = 0;
-		int proprio = 0;
-		try {
-			DialogueBd unDialogueBd = DialogueBd.getInstance();
-			rs = DialogueBd.lecture(mysql);
-			String mysqlproprio = "select * from proprietaire WHERE id_proprietaire=";
-			while (index < rs.size()) {
-				// On crée un stage
-				Oeuvrepret uneO = new Oeuvrepret();
-				// il faut redecouper la liste pour retrouver les lignes
-				uneO.setIdOeuvrepret(Integer.parseInt(rs.get(index + 0).toString()));
-				uneO.setTitreOeuvrepret(rs.get(index + 1).toString());
-				rp = DialogueBd.lecture(mysqlproprio.concat(rs.get(index + 2).toString()));
-				Proprietaire unAd = new Proprietaire();
-				
-				// il faut redecouper la liste pour retrouver les lignes
-				unAd.setIdProprietaire(Integer.parseInt(rp.get(proprio + 0).toString()));
-				unAd.setNomProprietaire(rp.get(proprio + 1).toString());
-				unAd.setPrenomProprietaire(rp.get(proprio + 2).toString());
-				uneO.setProprietaire(unAd);
-				// On incrémente tous les 3 champs
-				index = index + 3;
-				mesOeuvres.add(uneO);
-			}
-
-			return mesOeuvres;
-		} catch (Exception e) {
-			throw new MonException(e.getMessage(), SYSTEME_ERROR);
-		}
+		List<Oeuvrepret> finded = (List<Oeuvrepret>) findAll(mysql);
+		return finded;
 	}
 
 	public boolean supprimerOeuvrePret(int id) throws MonException {
-		String mysql;
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			mysql = "DELETE FROM oeuvrepret WHERE id_oeuvrepret = "+id;
-
-			unDialogueBd.insertionBD(mysql);
-			return true;
-		} catch (MonException e) {
-			throw e;
-		}
+		connection();
+		transaction.begin();
+		supprimer(Oeuvrepret.class, id);
+		return true;
 	}
 	
 	
@@ -151,121 +84,45 @@ public class OeuvreService extends EntityManagerService {
 	 * @throws MonException
 	 */
 	public void insererOeuvreVente(Oeuvrevente oeuvreVente)throws MonException {
-		String mysql = "INSERT INTO oeuvrevente  (titre_oeuvrevente, etat_oeuvrevente,prix_oeuvrevente, id_proprietaire) values (" +
-				"'" + oeuvreVente.getTitreOeuvrevente() +
-				"','" + oeuvreVente.getEtatOeuvrevente() + 
-				"','" + oeuvreVente.getPrixOeuvrevente() +
-				"','" + oeuvreVente.getProprietaire().getIdProprietaire() + 
-				"')";
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			unDialogueBd.insertionBD(mysql);
-		} catch (MonException e) {
-			throw e;
-		}
+		connection();
+		this.inserer(oeuvreVente);
 	}
 	
 	/**
-	 * 
 	 * @param oeuvreVente
 	 * @throws MonException
 	 */
 	public void mettreAJourOeuvreVente(Oeuvrevente oeuvreVente) throws MonException {
-		String mysql = "UPDATE oeuvrevente SET "+
-				"titre_oeuvrevente = '"+oeuvreVente.getTitreOeuvrevente()+"', "+
-				"etat_oeuvrevente = '"+oeuvreVente.getEtatOeuvrevente()+"', "+
-				"prix_oeuvrevente = '"+oeuvreVente.getPrixOeuvrevente()+"', "+
-				"id_proprietaire = '" + oeuvreVente.getProprietaire().getIdProprietaire()+"' "+
-				"WHERE id_oeuvrevente = "+oeuvreVente.getIdOeuvrevente();
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			unDialogueBd.insertionBD(mysql);
-		} catch (MonException e) {
-			throw e;
-		}
+		connection();
+		this.mettreAJour(oeuvreVente);
 	}
 	
 	public Oeuvrevente consulterOeuvrevente(int numero) throws MonException {
-		String mysql = "SELECT * FROM oeuvrevente WHERE id_oeuvrevente = " + numero;
-		List<Oeuvrevente> mesOeuvresVentes = consulterListeOeuvreVendre(mysql);
-		if (mesOeuvresVentes.isEmpty())
-			return null;
-		else {
-			return mesOeuvresVentes.get(0);
-		}
+		connection();
+		return em.find(Oeuvrevente.class, numero);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Oeuvrevente> consulterListeOeuvresVentes() throws MonException {
+		connection();
 		String mysql = "SELECT * FROM oeuvrevente";
-		return consulterListeOeuvreVendre(mysql);
-	}
-	
-	public List<Oeuvrevente> consulterListeOeuvresVentes(int page, int nombreParPage) throws MonException {
-		String mysql = "SELECT * FROM oeuvrevente "+
-					   "ORDER BY id_oeuvrevente "+
-					   "LIMIT "+(page*nombreParPage)+","+nombreParPage;
-		return consulterListeOeuvreVendre(mysql);
-	}
-	
-	private List<Oeuvrevente> consulterListeOeuvreVendre(String mysql) throws MonException {
-		List<Object> rs;
-		List<Object> rp;
-		List<Oeuvrevente> mesOeuvres = new ArrayList<Oeuvrevente>();
-		int index = 0;
-		int proprio = 0;
-		try {
-			DialogueBd unDialogueBd = DialogueBd.getInstance();
-			rs = DialogueBd.lecture(mysql);
-			String mysqlproprio = "select * from proprietaire WHERE id_proprietaire=";
-			
-			while (index < rs.size()) {
-				// On crée un stage
-				Oeuvrevente unA = new Oeuvrevente();
-				
-				// il faut redecouper la liste pour retrouver les lignes
-				unA.setIdOeuvrevente(Integer.parseInt(rs.get(index + 0).toString()));
-				unA.setTitreOeuvrevente(rs.get(index + 1).toString());
-				unA.setEtatOeuvrevente(rs.get(index + 2).toString());
-				unA.setPrixOeuvrevente(Float.parseFloat(rs.get(index + 3).toString()));
-				rp = DialogueBd.lecture(mysqlproprio.concat(rs.get(index + 4).toString()));
-				Proprietaire unAd = new Proprietaire();
-				
-				// il faut redecouper la liste pour retrouver les lignes
-				unAd.setIdProprietaire(Integer.parseInt(rp.get(proprio + 0).toString()));
-				unAd.setNomProprietaire(rp.get(proprio + 1).toString());
-				unAd.setPrenomProprietaire(rp.get(proprio + 2).toString());
-				unA.setProprietaire(unAd);
-				
-				// On incrémente tous les 3 champs
-				index = index + 5;
-				mesOeuvres.add(unA);
-			}
-
-			return mesOeuvres;
-			
-		} catch (Exception e) {
-			throw new MonException(e.getMessage(), SYSTEME_ERROR);
-		}
+		List<Oeuvrevente> finded = (List<Oeuvrevente>) findAll(mysql);
+		return finded;
 	}
 	
 	//permet de suppprimer une oeuvre vente
 	public boolean supprimerOeuvreVente(int id) throws MonException {
-		String mysql = "DELETE FROM oeuvrevente WHERE id_oeuvrevente = "+id;
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			unDialogueBd.insertionBD(mysql);
-			return true;
-		} catch (MonException e) {
-			throw e;
-		}
+		connection();
+		this.supprimer(Oeuvrevente.class, id);
+		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Oeuvrevente> consulterListOeuvresReservables() throws MonException {
+		connection();
 		String mysql = "select * from oeuvrevente WHERE etat_oeuvrevente ='L' ";
-		return consulterListeOeuvreVendre(mysql);
+		List<Oeuvrevente> finded = (List<Oeuvrevente>) findAll(mysql);
+		return finded;
 	}
 
 	public Oeuvrevente getOeuvre(int id) {

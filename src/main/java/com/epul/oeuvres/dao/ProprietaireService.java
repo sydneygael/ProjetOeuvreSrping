@@ -4,56 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.epul.oeuvres.meserreurs.MonException;
+import com.epul.oeuvres.metier.Oeuvrevente;
 import com.epul.oeuvres.metier.Proprietaire;
 import com.epul.oeuvres.persistance.DialogueBd;
 
-public class ProprietaireService {
-	
-    public List<Proprietaire> consulterListeProprietaires() throws MonException {
-        String mysql = "select * from proprietaire";
-        return consulterListeProprietaires(mysql);
-    }
+public class ProprietaireService extends EntityManagerService {
 
-    private List<Proprietaire> consulterListeProprietaires(String mysql) throws MonException {
-        List<Object> rs;
-        List<Proprietaire> mesProprietaires = new ArrayList<Proprietaire>();
-        int index = 0;
-        try {
-            DialogueBd unDialogueBd = DialogueBd.getInstance();
-            rs = DialogueBd.lecture(mysql);
-            
-            while (index < rs.size()) {
-            	
-                Proprietaire unP = new Proprietaire();
-                // il faut redecouper la liste pour retrouver les lignes
-                unP.setIdProprietaire(Integer.parseInt(rs.get(index + 0).toString()));
-                unP.setNomProprietaire(rs.get(index + 1).toString());
-                unP.setPrenomProprietaire(rs.get(index + 2).toString());
-                // incrémenter tous les 3 champs
-                index = index + 3;
-                mesProprietaires.add(unP);
-            }
+	public Proprietaire consulterProprietaire(int numero) throws MonException {
+		connection();
+		return (Proprietaire) this.find(Proprietaire.class, numero);
+	}
 
-            return mesProprietaires;
-        } catch (Exception exc) {
-            throw new MonException(exc.getMessage(), "systeme");
-        }
-    }
+	public List<Proprietaire> consulterListeProprietaires() throws MonException {
+		String mysql = "select * from proprietaire";
+		List<Proprietaire> finded = (List<Proprietaire>) findAll(mysql);
+		return finded;
+	}
 
-    public Proprietaire getProprietaire(int idProprietaire) throws MonException{
-        Proprietaire proprietaire = new Proprietaire();
+	public Proprietaire getProprietaire(int idProprietaire) throws MonException{
+		Proprietaire proprietaire = new Proprietaire();
 
-        try{
-            for(Proprietaire p : consulterListeProprietaires()){
-                if(p.getIdProprietaire() == idProprietaire){
-                	proprietaire = p;
-                    break;
-                }
-            }
-        } catch (MonException e)
-        {
-            e.printStackTrace();
-        }
-        return proprietaire;
-    }
+		try{
+			for(Proprietaire p : consulterListeProprietaires()){
+				if(p.getIdProprietaire() == idProprietaire){
+					proprietaire = p;
+					break;
+				}
+			}
+		} catch (MonException e)
+		{
+			e.printStackTrace();
+		}
+		return proprietaire;
+	}
 }
