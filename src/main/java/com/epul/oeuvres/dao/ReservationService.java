@@ -10,96 +10,44 @@ import com.epul.oeuvres.meserreurs.MonException;
 import com.epul.oeuvres.metier.*;
 import com.epul.oeuvres.persistance.DialogueBd;
 
-public class ReservationService {
+public class ReservationService extends EntityManagerService {
 
 	public void insererReservation(Reservation reservation)throws MonException {
-		String mysql;
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			mysql = "INSERT INTO reservation  (id_oeuvrevente, id_adherent, date_reservation, statut) values (" +
-					"'" + reservation.getOeuvrevente().getIdOeuvrevente() +
-					"','" + reservation.getAdherent().getIdAdherent() +
-					"','" + new SimpleDateFormat("yyyy-MM-dd").format(reservation.getDateReservation()) +
-					"','" + reservation.getStatut() +
-					"')";
-
-			unDialogueBd.insertionBD(mysql);
-		} catch (MonException e) {
-			throw e;
-		}
+		this.connection();
+		transaction.begin();
+		ReservationPK rPK = new ReservationPK();
+		rPK.setIdOeuvrevente(reservation.getOeuvrevente().getIdOeuvrevente());
+		rPK.setIdAdherent(reservation.getAdherent().getIdAdherent());
+		reservation.setId(rPK);
+		em.persist(reservation);
+		transaction.commit();
+		em.close();
 	}
-	
+
 	public void mettreAJourReservation(Reservation reservation, int ancinneOeuvre, int ancienAd) throws MonException {
-		String mysql;
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			mysql = "UPDATE reservation SET " +
-					" date_reservation = '" + new SimpleDateFormat("yyyy-MM-dd").format(reservation.getDateReservation()) + "', " +
-					" id_oeuvrevente = '" + reservation.getOeuvrevente().getIdOeuvrevente() +  "', " +
-					" id_adherent = '" + reservation.getAdherent().getIdAdherent() +  "' " +
-					" WHERE id_oeuvrevente = " + ancinneOeuvre +
-					" AND id_adherent = " + ancienAd;
-
-			unDialogueBd.insertionBD(mysql);
-		} catch (MonException e) {
-			throw e;
-		}
+		this.connection();
+		this.mettreAJour(reservation);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Reservation> consulterListeReservation() throws MonException {
 		String mysql = "select * from reservation";
-		return consulterReservation(mysql);
+		List<Reservation> finded = (List<Reservation>) findAll(mysql);
+		return finded;
 	}
 
-	private List<Reservation> consulterReservation(String mysql) throws MonException {
-		List<Object> rs;
-		List<Reservation> listeResa = new ArrayList<Reservation>();
-		int index = 0;
-		try {
-			DialogueBd unDialogueBd = DialogueBd.getInstance();
-			rs = DialogueBd.lecture(mysql);
-			OeuvreService oeuvreService = new OeuvreService();
-			Service adherentService = new Service();
-			while (index < rs.size()) {
-				// On cree un stage
-				Reservation resaCible = new Reservation();
-				Date date = null;
-				try {
-					date = new SimpleDateFormat("yyyy-MM-dd").parse(rs.get(index + 2).toString());
-					String s = new SimpleDateFormat("yyyy-MM-dd").format(date);
-
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				// il faut redecouper la liste pour retrouver les lignes
-				resaCible.setOeuvrevente(oeuvreService.getOeuvre(Integer.parseInt(rs.get(index + 0).toString())));
-				resaCible.setAdherent(adherentService.getAdherent(Integer.parseInt(rs.get(index + 1).toString())));
-				resaCible.setDateReservation(date);
-
-				index = index + 4;
-				listeResa.add(resaCible);
-			}
-
-			return listeResa;
-		} catch (Exception exc) {
-			throw new MonException(exc.getMessage(), "systeme");
-		}
-	}
-
-	public boolean supprimerReservation(int idOeuvre) throws MonException {
-		String mysql;
-
-		DialogueBd unDialogueBd = DialogueBd.getInstance();
-		try {
-			mysql = "DELETE FROM reservation WHERE id_oeuvrevente = " + idOeuvre ;
-
-			unDialogueBd.insertionBD(mysql);
-			return true;
-		} catch (MonException e) {
-			throw e;
-		}
+	public boolean supprimerReservation(int idOeuvre,int idAdherent) throws MonException {
+		this.connection();
+		transaction.begin();
+		ReservationPK rPk = new ReservationPK();
+		rPk.setIdOeuvrevente(idOeuvre);
+		rPk.setIdAdherent(idAdherent);
+		Reservation reservation = em.find(Reservation.class, rPk);
+		em.remove(reservation);
+		em.getTransaction().commit();
+		em.close();
+		emf.close();
+		return true;
 	}
 
 

@@ -38,6 +38,7 @@
 						<td><button data-id="${res.oeuvrevente.idOeuvrevente}"
 								data-titre="${res.oeuvrevente.titreOeuvrevente}"
 								data-proprietaire="${res.oeuvrevente.proprietaire.nomProprietaire}"
+								data-adherent="${res.adherent.idAdherent}"
 								class="action glyphicon glyphicon-trash" data-toggle="modal"
 								data-target="#myModal"></button></td>
 					</tr>
@@ -80,6 +81,12 @@
 									id="proprietaire" readonly>
 							</div>
 						</div>
+						<div class="form-group supprimer">
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="txtadherent"
+									id="adherent" readonly>
+							</div>
+						</div>
 						<div class="modal-footer">
 							<button class="btn btn-success" type="submit" name="bt">Validation</button>
 						</div>
@@ -95,6 +102,7 @@
                 var id = button.data('id')
                 var titre = button.data('titre')
                 var proprietaire = button.data('proprietaire')
+                var adherent = button.data('proprietaire')
                 // Extract info from data-* attributes
                 // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
                 // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
@@ -102,6 +110,7 @@
                 modal.find('.modal-body #id').val(id)
                 modal.find('.modal-body #titre').val(titre)
                 modal.find('.modal-body #proprietaire').val(proprietaire)
+                modal.find('.modal-body #adherent').val(adherent)
             })
         </script>
 </body>

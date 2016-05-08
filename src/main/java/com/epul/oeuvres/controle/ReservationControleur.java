@@ -45,14 +45,10 @@ public class ReservationControleur extends MultiActionController {
 		ReservationService unService = new ReservationService();
 		
 			int idOeuvre = Integer.parseInt(request.getParameter("txtid"));
-
+			int idAd = Integer.parseInt(request.getParameter("txtadherent"));
+			
 			try {
-				unService.supprimerReservation(idOeuvre);
-
-				OeuvreService oeuvreService = new OeuvreService();
-				Oeuvrevente oeuvre = oeuvreService.getOeuvre(idOeuvre);
-				oeuvre.setEtatOeuvrevente("L");
-				oeuvreService.mettreAJourOeuvreVente(oeuvre);
+				unService.supprimerReservation(idOeuvre,idAd);
 
 			} catch (MonException e) {
 				e.printStackTrace();
