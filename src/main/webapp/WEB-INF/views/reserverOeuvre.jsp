@@ -7,8 +7,12 @@
 <head>
 
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<script src="bootstrap/js/jquery.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="resources/bootstrap/js/jquery.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="resources/bootstrap/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Réserver une oeuvre</title>
 </head>

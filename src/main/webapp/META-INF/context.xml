@@ -6,7 +6,7 @@
         <Resource name="jdbc/DSOeuvre"
             auth="Container"
             type="javax.sql.DataSource"
-            username="userepul"
+            username="root"
             driverClassName="com.mysql.jdbc.Driver"
             url="jdbc:mysql://localhost:3306/baseoeuvre"
             maxActive="8"

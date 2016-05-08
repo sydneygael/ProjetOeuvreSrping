@@ -5,14 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link
-	href="<%=request.getContextPath()%>/resources/lib/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" />
-<link href="<%=request.getContextPath()%>/resources/css/index.css"
-	rel="stylesheet" type="text/css" />
-<script
-	src="<%=request.getContextPath()%>/resources/lib/bootstrap/js/bootstrap.min.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css" />
 <title>Affichage de toutes les oeuvres</title>
 </head>
 <body>
@@ -216,6 +210,11 @@
 		</div>
 	</div>
 
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="resources/bootstrap/js/bootstrap.min.js"></script>
 
 	<script>
 		$('#myModal').on('show.bs.modal', function(event) {
@@ -228,22 +227,27 @@
 			$(event.currentTarget).find('input[name="txtidoeuvre"]').val(id);
 			$(event.currentTarget).find('input[name="txtoeuvre"]').val(nom);
 		})
-		
-		$('#myModal2').on('show.bs.modal', function(event) {
-			var button = $(event.relatedTarget) // Button that triggered the modal
-			var id = $(event.relatedTarget).data('idoeuvre');
-			var nom = $(event.relatedTarget).data('titreoeuvre');
-			var prix = $(event.relatedTarget).data('prixoeuvre');
-			var prop = $(event.relatedTarget).data('propOeuvre');
-			// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-			// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-			var modal = $(this)
-			$(event.currentTarget).find('input[name="txtidoeuvre"]').val(id);
-			$(event.currentTarget).find('input[name="txtoeuvre"]').val(nom);
-			$(event.currentTarget).find('input[name="txtprixoeuvre"]').val(prix);
-			$(event.currentTarget).find('input[name="txtpropoeuvre"]').val(prop);
-		})
-		
+
+		$('#myModal2').on(
+				'show.bs.modal',
+				function(event) {
+					var button = $(event.relatedTarget) // Button that triggered the modal
+					var id = $(event.relatedTarget).data('idoeuvre');
+					var nom = $(event.relatedTarget).data('titreoeuvre');
+					var prix = $(event.relatedTarget).data('prixoeuvre');
+					var prop = $(event.relatedTarget).data('propOeuvre');
+					// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+					// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+					var modal = $(this)
+					$(event.currentTarget).find('input[name="txtidoeuvre"]')
+							.val(id);
+					$(event.currentTarget).find('input[name="txtoeuvre"]').val(
+							nom);
+					$(event.currentTarget).find('input[name="txtprixoeuvre"]')
+							.val(prix);
+					$(event.currentTarget).find('input[name="txtpropoeuvre"]')
+							.val(prop);
+				})
 	</script>
 </body>
 </html>
